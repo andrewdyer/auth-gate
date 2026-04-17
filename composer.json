@@ -1,42 +1,31 @@
 {
     "name": "andrewdyer/gate",
-    "description": "Check if a user is authorized to perform a given action",
-    "keywords": [
-        "php",
-        "gate",
-        "authorization",
-        "permissions"
-    ],
+    "description": "A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface",
     "type": "library",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Andrew Dyer",
-            "homepage": "https://andrewdyer.rocks",
-            "role": "developer"
-        }
-    ],
     "autoload": {
         "psr-4": {
-            "Anddye\\Gate\\": "src"
+            "AndrewDyer\\Gate\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Anddye\\Gate\\Tests\\": "tests"
+            "AndrewDyer\\Gate\\Tests\\": "tests"
         }
     },
     "require": {
-        "php": "^7.2.5"
+        "php": "^8.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.5",
-        "symfony/var-dumper": "^5.0",
-        "friendsofphp/php-cs-fixer": "^2.16"
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "phpunit/phpunit": "^10.5"
     },
     "scripts": {
-        "cs": [
-            "vendor/bin/php-cs-fixer fix"
-        ]
-    }
+        "cs": "php-cs-fixer fix",
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable"
 }

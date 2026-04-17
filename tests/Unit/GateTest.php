@@ -1,43 +1,47 @@
 <?php
 
-namespace Anddye\Gate\Tests\Unit;
+declare(strict_types=1);
 
-use Anddye\Gate\Gate;
-use Anddye\Gate\Tests\Stubs\Post;
-use Anddye\Gate\Tests\Stubs\User;
-use Anddye\Gate\UnauthorizedException;
+namespace AndrewDyer\Gate\Tests\Unit;
+
+use AndrewDyer\Gate\Exceptions\InvalidCallbackReturnValueException;
+use AndrewDyer\Gate\Exceptions\UnauthorizedException;
+use AndrewDyer\Gate\Exceptions\UndefinedAbilityException;
+use AndrewDyer\Gate\Gate;
+use AndrewDyer\Gate\Tests\Stubs\Post;
+use AndrewDyer\Gate\Tests\Stubs\User;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class GateTest.
+ * Unit tests for Gate.
  */
 final class GateTest extends TestCase
 {
     /**
-     * @var Gate
+     * The Gate instance under test.
      */
-    protected $gate;
+    private Gate $gate;
 
     /**
-     * This method is called before each test.
+     * Sets up the Gate instance with a default authenticated user.
+     *
+     * @return void
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = new User();
-        $user->setId(1);
-        $user->setIsAdmin(true);
+        $user = new User(1, true);
 
         $this->gate = new Gate($user);
     }
 
     /**
-     * @test
+     * Asserts that the actor is injected into closure callbacks.
      */
-    public function actor_is_injected_into_closure_callbacks(): void
+    public function testActorIsInjectedIntoClosureCallbacks(): void
     {
-        $this->gate->define('foo', function ($actor) {
+        $this->gate->define('foo', function($actor) {
             $this->assertEquals(1, $actor->getId());
 
             return true;
@@ -47,15 +51,15 @@ final class GateTest extends TestCase
     }
 
     /**
-     * @test
+     * Asserts that all closure callbacks allow access when all abilities are granted.
      */
-    public function all_closure_callbacks_allow(): void
+    public function testAllClosureCallbacksAllow(): void
     {
-        $this->gate->define('foo', function () {
+        $this->gate->define('foo', function() {
             return true;
         });
 
-        $this->gate->define('bar', function () {
+        $this->gate->define('bar', function() {
             return true;
         });
 
@@ -63,26 +67,61 @@ final class GateTest extends TestCase
     }
 
     /**
-     * @test
+     * Asserts that any() returns true when at least one ability is allowed.
      */
-    public function authorize_throws_unauthorized_exception(): void
+    public function testAnyReturnsTrueWhenAtLeastOneAbilityIsAllowed(): void
+    {
+        $this->gate->define('foo', function() {
+            return false;
+        });
+
+        $this->gate->define('bar', function() {
+            return true;
+        });
+
+        $this->assertTrue($this->gate->any(['foo', 'bar']));
+    }
+
+    /**
+     * Asserts that any() returns false when no abilities are allowed.
+     */
+    public function testAnyReturnsFalseWhenNoAbilitiesAreAllowed(): void
+    {
+        $this->gate->define('foo', function() {
+            return false;
+        });
+
+        $this->gate->define('bar', function() {
+            return false;
+        });
+
+        $this->assertFalse($this->gate->any(['foo', 'bar']));
+    }
+
+    /**
+     * Asserts that authorize throws an UnauthorizedException when the ability is denied.
+     */
+    public function testAuthorizeThrowsUnauthorizedException(): void
     {
         $this->expectException(UnauthorizedException::class);
 
-        $this->gate->define('foo', function () {
+        $this->gate->define('foo', function() {
             return false;
         });
 
         $this->gate->authorize(['foo']);
     }
 
-    public function before_callbacks_can_override_result_if_necessary(): void
+    /**
+     * Asserts that before callbacks can override the result of an ability check.
+     */
+    public function testBeforeCallbacksCanOverrideResultIfNecessary(): void
     {
-        $this->gate->define('foo', function () {
+        $this->gate->define('foo', function() {
             return true;
         });
 
-        $this->gate->before(function ($actor, $ability) {
+        $this->gate->before(function($actor, $ability) {
             $this->assertEquals('foo', $ability);
 
             return false;
@@ -92,15 +131,15 @@ final class GateTest extends TestCase
     }
 
     /**
-     * @test
+     * Asserts that before callbacks do not interrupt the gate check when no value is returned.
      */
-    public function before_callbacks_dont_interrupt_gate_check_if_no_value_is_returned(): void
+    public function testBeforeCallbacksDontInterruptGateCheckIfNoValueIsReturned(): void
     {
-        $this->gate->define('foo', function () {
+        $this->gate->define('foo', function() {
             return false;
         });
 
-        $this->gate->before(function ($actor, $ability) {
+        $this->gate->before(function($actor, $ability) {
             $this->assertEquals('foo', $ability);
         });
 
@@ -108,15 +147,13 @@ final class GateTest extends TestCase
     }
 
     /**
-     * @test
+     * Asserts that a single argument can be passed when checking abilities.
      */
-    public function can_pass_a_single_argument_when_checking_abilities(): void
+    public function testCanPassASingleArgumentWhenCheckingAbilities(): void
     {
-        $post = new Post();
-        $post->setId(1);
-        $post->setAuthorId(1);
+        $post = new Post(1, 1);
 
-        $this->gate->define('foo', function ($actor, $x) use ($post) {
+        $this->gate->define('foo', function($actor, $x) use ($post) {
             $this->assertEquals($post, $x);
 
             return true;
@@ -126,11 +163,29 @@ final class GateTest extends TestCase
     }
 
     /**
-     * @test
+     * Asserts that multiple arguments can be passed when checking abilities.
      */
-    public function closure_callback_is_denied(): void
+    public function testCanPassMultipleArgumentsWhenCheckingAbilities(): void
     {
-        $this->gate->define('foo', function () {
+        $post = new Post(1, 1);
+        $extra = 'context';
+
+        $this->gate->define('foo', function($actor, $x, $y) use ($post, $extra) {
+            $this->assertEquals($post, $x);
+            $this->assertEquals($extra, $y);
+
+            return true;
+        });
+
+        $this->assertTrue($this->gate->allows('foo', $post, $extra));
+    }
+
+    /**
+     * Asserts that denies returns false when the ability is allowed.
+     */
+    public function testClosureCallbackIsDenied(): void
+    {
+        $this->gate->define('foo', function() {
             return true;
         });
 
@@ -138,53 +193,44 @@ final class GateTest extends TestCase
     }
 
     /**
-     * @test
+     * Asserts that a before callback returning a non-boolean non-null value throws an exception.
      */
-    public function closures_can_be_defined(): void
+    public function testBeforeCallbackThrowsExceptionOnNonBooleanReturn(): void
     {
-        $this->gate->define('foo', function () {
+        $this->expectException(InvalidCallbackReturnValueException::class);
+        $this->expectExceptionMessage('Before callback must return bool or null, got int.');
+
+        $this->gate->define('foo', function() {
+            return true;
+        });
+
+        $this->gate->before(function() {
+            return 1;
+        });
+
+        $this->gate->allows('foo');
+    }
+
+    /**
+     * Asserts that checking an undefined ability throws an UndefinedAbilityException.
+     */
+    public function testCheckingUndefinedAbilityThrowsException(): void
+    {
+        $this->expectException(UndefinedAbilityException::class);
+        $this->expectExceptionMessage('Ability [foo] is not defined.');
+
+        $this->gate->allows('foo');
+    }
+
+    /**
+     * Asserts that closure callbacks can be defined and evaluated as abilities.
+     */
+    public function testClosuresCanBeDefined(): void
+    {
+        $this->gate->define('foo', function() {
             return true;
         });
 
         $this->assertTrue($this->gate->allows('foo'));
-    }
-
-    /**
-     * @test
-     */
-    public function multiple_arguments_can_be_passed_when_checking_abilities()
-    {
-        $post = new Post();
-        $post->setId(1);
-        $post->setAuthorId(1);
-
-        $secondPost = new Post();
-        $secondPost->setId(2);
-        $secondPost->setAuthorId(1);
-
-        $this->gate->define('foo', function ($actor, $x, $y) use ($post, $secondPost) {
-            $this->assertEquals($post, $x);
-            $this->assertEquals($secondPost, $y);
-
-            return true;
-        });
-
-        $this->assertTrue($this->gate->allows('foo', $post, $secondPost));
-    }
-
-    /**
-     * @test
-     */
-    public function multiple_closures_can_be_defined(): void
-    {
-        $this->gate->define('foo', function () {
-            return true;
-        });
-
-        $this->gate->define('bar', function () {
-            return false;
-        });
-
-        $this->assertTrue($this->gate->any(['bar', 'foo']));
     }
 }
