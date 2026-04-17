@@ -191,7 +191,7 @@ final class Gate
     private function inspect(string $ability, mixed ...$args): bool
     {
         foreach ($this->beforeCallbacks as $beforeCallback) {
-            $result = $beforeCallback($this->actor, $ability);
+            $result = $beforeCallback($this->actor, $ability, ...$args);
 
             if ($result === null) {
                 continue;
