@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace AndrewDyer\Gate\Tests\Unit;
 
+use AndrewDyer\Gate\Exceptions\InvalidCallbackReturnValueException;
+use AndrewDyer\Gate\Exceptions\UnauthorizedException;
+use AndrewDyer\Gate\Exceptions\UndefinedAbilityException;
 use AndrewDyer\Gate\Gate;
-use AndrewDyer\Gate\InvalidCallbackReturnValueException;
 use AndrewDyer\Gate\Tests\Stubs\Post;
 use AndrewDyer\Gate\Tests\Stubs\User;
-use AndrewDyer\Gate\UnauthorizedException;
-use AndrewDyer\Gate\UndefinedAbilityException;
 use PHPUnit\Framework\TestCase;
 
 /**

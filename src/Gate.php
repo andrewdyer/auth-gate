@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace AndrewDyer\Gate;
 
+use AndrewDyer\Gate\Contracts\Authenticatable;
+use AndrewDyer\Gate\Exceptions\InvalidCallbackReturnValueException;
+use AndrewDyer\Gate\Exceptions\UnauthorizedException;
+use AndrewDyer\Gate\Exceptions\UndefinedAbilityException;
+
 /**
  * Manages ability definitions and authorisation checks for an authenticated actor.
  */

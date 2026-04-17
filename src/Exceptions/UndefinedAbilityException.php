@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AndrewDyer\Gate;
+namespace AndrewDyer\Gate\Exceptions;
 
 use LogicException;
 

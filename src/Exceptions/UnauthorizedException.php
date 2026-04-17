@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace AndrewDyer\Gate;
+namespace AndrewDyer\Gate\Exceptions;
+
+use RuntimeException;
 
 /**
  * Exception thrown when an actor is not authorised to perform an action.
  */
-final class UnauthorizedException extends \RuntimeException
+final class UnauthorizedException extends RuntimeException
 {
     /**
      * Creates an instance for an unauthorised action.

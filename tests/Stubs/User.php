@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AndrewDyer\Gate\Tests\Stubs;
 
-use AndrewDyer\Gate\Authenticatable;
+use AndrewDyer\Gate\Contracts\Authenticatable;
 
 /**
  * Stub implementation of Authenticatable representing a user actor.

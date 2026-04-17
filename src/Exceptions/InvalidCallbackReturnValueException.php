@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace AndrewDyer\Gate;
+namespace AndrewDyer\Gate\Exceptions;
+
+use LogicException;
 
 /**
  * Exception thrown when a callback returns an invalid value.
  */
-final class InvalidCallbackReturnValueException extends \LogicException
+final class InvalidCallbackReturnValueException extends LogicException
 {
     /**
      * Creates an instance for a before callback that returned a non-boolean non-null value.
