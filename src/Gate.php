@@ -46,7 +46,7 @@ final class Gate
      */
     public function all(array $abilities, mixed ...$args): bool
     {
-        return $this->check($abilities, $args);
+        return $this->check($abilities, ...$args);
     }
 
     /**
@@ -62,7 +62,7 @@ final class Gate
      */
     public function allows(string $ability, mixed ...$args): bool
     {
-        return $this->check([$ability], $args);
+        return $this->check([$ability], ...$args);
     }
 
     /**
@@ -79,7 +79,7 @@ final class Gate
     public function any(array $abilities, mixed ...$args): bool
     {
         foreach ($abilities as $ability) {
-            if ($this->check([$ability], $args)) {
+            if ($this->check([$ability], ...$args)) {
                 return true;
             }
         }
@@ -101,7 +101,7 @@ final class Gate
      */
     public function authorize(array $abilities, mixed ...$args): void
     {
-        if (!$this->check($abilities, $args)) {
+        if (!$this->check($abilities, ...$args)) {
             throw UnauthorizedException::forAction();
         }
     }
@@ -148,14 +148,14 @@ final class Gate
      */
     public function denies(string $ability, mixed ...$args): bool
     {
-        return !$this->check([$ability], $args);
+        return !$this->check([$ability], ...$args);
     }
 
     /**
      * Determines whether all of the given abilities pass inspection.
      *
      * @param array $abilities The ability names to check.
-     * @param array $args      Arguments passed to ability callbacks.
+     * @param mixed ...$args   Arguments passed to ability callbacks.
      *
      * @return bool True if all abilities pass, false otherwise.
      *
@@ -164,10 +164,10 @@ final class Gate
      *
      * @internal
      */
-    private function check(array $abilities, array $args = []): bool
+    private function check(array $abilities, mixed ...$args): bool
     {
         foreach ($abilities as $ability) {
-            if (!$this->inspect($ability, $args)) {
+            if (!$this->inspect($ability, ...$args)) {
                 return false;
             }
         }
@@ -179,7 +179,7 @@ final class Gate
      * Processes before callbacks and evaluates the ability callback for the given ability.
      *
      * @param string $ability The ability name to inspect.
-     * @param array  $args    Arguments passed to the ability callback.
+     * @param mixed  ...$args Arguments passed to the ability callback.
      *
      * @return bool True if the ability is allowed, false otherwise.
      *
@@ -188,7 +188,7 @@ final class Gate
      *
      * @internal
      */
-    private function inspect(string $ability, array $args): bool
+    private function inspect(string $ability, mixed ...$args): bool
     {
         foreach ($this->beforeCallbacks as $beforeCallback) {
             $result = $beforeCallback($this->actor, $ability);
