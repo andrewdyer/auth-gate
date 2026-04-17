@@ -1,6 +1,6 @@
 <?php
 
-namespace Anddye\Gate;
+namespace AndrewDyer\Gate;
 
 /**
  * Class Gate.

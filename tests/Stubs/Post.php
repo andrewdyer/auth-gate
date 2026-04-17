@@ -1,6 +1,6 @@
 <?php
 
-namespace Anddye\Gate\Tests\Stubs;
+namespace AndrewDyer\Gate\Tests\Stubs;
 
 /**
  * Class Post.

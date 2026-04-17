@@ -23,8 +23,8 @@ composer require andrewdyer/gate
 To get started with the Gate library, you need to create an instance of the `Gate` class and pass an `Authenticatable` user to it.
 
 ```php
-use Anddye\Gate\Gate;
-use Anddye\Gate\Authenticatable;
+use AndrewDyer\Gate\Gate;
+use AndrewDyer\Gate\Authenticatable;
 
 class User implements Authenticatable {
     // User implementation

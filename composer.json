@@ -18,12 +18,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Anddye\\Gate\\": "src"
+            "AndrewDyer\\Gate\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Anddye\\Gate\\Tests\\": "tests"
+            "AndrewDyer\\Gate\\Tests\\": "tests"
         }
     },
     "require": {

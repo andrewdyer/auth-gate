@@ -1,8 +1,8 @@
 <?php
 
-namespace Anddye\Gate\Tests\Stubs;
+namespace AndrewDyer\Gate\Tests\Stubs;
 
-use Anddye\Gate\Authenticatable;
+use AndrewDyer\Gate\Authenticatable;
 
 /**
  * Class User.

@@ -1,11 +1,11 @@
 <?php
 
-namespace Anddye\Gate\Tests\Unit;
+namespace AndrewDyer\Gate\Tests\Unit;
 
-use Anddye\Gate\Gate;
-use Anddye\Gate\Tests\Stubs\Post;
-use Anddye\Gate\Tests\Stubs\User;
-use Anddye\Gate\UnauthorizedException;
+use AndrewDyer\Gate\Gate;
+use AndrewDyer\Gate\Tests\Stubs\Post;
+use AndrewDyer\Gate\Tests\Stubs\User;
+use AndrewDyer\Gate\UnauthorizedException;
 use PHPUnit\Framework\TestCase;
 
 /**
