@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace AndrewDyer\Gate;
 
-use UnexpectedValueException;
-
 /**
  * Manages ability definitions and authorisation checks for an authenticated actor.
  */
@@ -38,8 +36,8 @@ final class Gate
      *
      * @return bool True if all abilities are allowed, false otherwise.
      *
-     * @throws UndefinedAbilityException When any of the given abilities has not been defined.
-     * @throws UnexpectedValueException  When a before callback returns a non-boolean non-null value.
+     * @throws UndefinedAbilityException           When any of the given abilities has not been defined.
+     * @throws InvalidCallbackReturnValueException When a before callback returns a non-boolean non-null value.
      */
     public function all(array $abilities, mixed ...$args): bool
     {
@@ -54,8 +52,8 @@ final class Gate
      *
      * @return bool True if the ability is allowed, false otherwise.
      *
-     * @throws UndefinedAbilityException When the given ability has not been defined.
-     * @throws UnexpectedValueException  When a before callback returns a non-boolean non-null value.
+     * @throws UndefinedAbilityException           When the given ability has not been defined.
+     * @throws InvalidCallbackReturnValueException When a before callback returns a non-boolean non-null value.
      */
     public function allows(string $ability, mixed ...$args): bool
     {
@@ -70,8 +68,8 @@ final class Gate
      *
      * @return bool True if any ability is allowed, false otherwise.
      *
-     * @throws UndefinedAbilityException When any of the given abilities has not been defined.
-     * @throws UnexpectedValueException  When a before callback returns a non-boolean non-null value.
+     * @throws UndefinedAbilityException           When any of the given abilities has not been defined.
+     * @throws InvalidCallbackReturnValueException When a before callback returns a non-boolean non-null value.
      */
     public function any(array $abilities, mixed ...$args): bool
     {
@@ -92,9 +90,9 @@ final class Gate
      *
      * @return void
      *
-     * @throws UnauthorizedException     When any of the given abilities is not allowed.
-     * @throws UndefinedAbilityException When any of the given abilities has not been defined.
-     * @throws UnexpectedValueException  When a before callback returns a non-boolean non-null value.
+     * @throws UnauthorizedException               When any of the given abilities is not allowed.
+     * @throws UndefinedAbilityException           When any of the given abilities has not been defined.
+     * @throws InvalidCallbackReturnValueException When a before callback returns a non-boolean non-null value.
      */
     public function authorize(array $abilities, mixed ...$args): void
     {
@@ -140,8 +138,8 @@ final class Gate
      *
      * @return bool True if the ability is denied, false otherwise.
      *
-     * @throws UndefinedAbilityException When the given ability has not been defined.
-     * @throws UnexpectedValueException  When a before callback returns a non-boolean non-null value.
+     * @throws UndefinedAbilityException           When the given ability has not been defined.
+     * @throws InvalidCallbackReturnValueException When a before callback returns a non-boolean non-null value.
      */
     public function denies(string $ability, mixed ...$args): bool
     {
@@ -156,8 +154,8 @@ final class Gate
      *
      * @return bool True if all abilities pass, false otherwise.
      *
-     * @throws UndefinedAbilityException When any of the given abilities has not been defined.
-     * @throws UnexpectedValueException  When a before callback returns a non-boolean non-null value.
+     * @throws UndefinedAbilityException           When any of the given abilities has not been defined.
+     * @throws InvalidCallbackReturnValueException When a before callback returns a non-boolean non-null value.
      *
      * @internal
      */
@@ -180,8 +178,8 @@ final class Gate
      *
      * @return bool True if the ability is allowed, false otherwise.
      *
-     * @throws UndefinedAbilityException When the given ability has not been defined.
-     * @throws UnexpectedValueException  When a before callback returns a non-boolean non-null value.
+     * @throws UndefinedAbilityException           When the given ability has not been defined.
+     * @throws InvalidCallbackReturnValueException When a before callback returns a non-boolean non-null value.
      *
      * @internal
      */
@@ -195,12 +193,7 @@ final class Gate
             }
 
             if (!is_bool($result)) {
-                throw new UnexpectedValueException(
-                    sprintf(
-                        'Before callback must return bool or null, got %s.',
-                        get_debug_type($result)
-                    )
-                );
+                throw InvalidCallbackReturnValueException::forBeforeCallback($result);
             }
 
             return $result;

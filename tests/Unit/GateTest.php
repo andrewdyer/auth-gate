@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace AndrewDyer\Gate\Tests\Unit;
 
 use AndrewDyer\Gate\Gate;
+use AndrewDyer\Gate\InvalidCallbackReturnValueException;
 use AndrewDyer\Gate\Tests\Stubs\Post;
 use AndrewDyer\Gate\Tests\Stubs\User;
 use AndrewDyer\Gate\UnauthorizedException;
 use AndrewDyer\Gate\UndefinedAbilityException;
 use PHPUnit\Framework\TestCase;
-use UnexpectedValueException;
 
 /**
  * Unit tests for Gate.
@@ -197,7 +197,7 @@ final class GateTest extends TestCase
      */
     public function testBeforeCallbackThrowsExceptionOnNonBooleanReturn(): void
     {
-        $this->expectException(UnexpectedValueException::class);
+        $this->expectException(InvalidCallbackReturnValueException::class);
         $this->expectExceptionMessage('Before callback must return bool or null, got int.');
 
         $this->gate->define('foo', function() {
