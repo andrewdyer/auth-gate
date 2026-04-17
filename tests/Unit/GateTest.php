@@ -66,6 +66,38 @@ final class GateTest extends TestCase
     }
 
     /**
+     * Asserts that any() returns true when at least one ability is allowed.
+     */
+    public function testAnyReturnsTrueWhenAtLeastOneAbilityIsAllowed(): void
+    {
+        $this->gate->define('foo', function() {
+            return false;
+        });
+
+        $this->gate->define('bar', function() {
+            return true;
+        });
+
+        self::assertTrue($this->gate->any(['foo', 'bar']));
+    }
+
+    /**
+     * Asserts that any() returns false when no abilities are allowed.
+     */
+    public function testAnyReturnsFalseWhenNoAbilitiesAreAllowed(): void
+    {
+        $this->gate->define('foo', function() {
+            return false;
+        });
+
+        $this->gate->define('bar', function() {
+            return false;
+        });
+
+        self::assertFalse($this->gate->any(['foo', 'bar']));
+    }
+
+    /**
      * Asserts that authorize throws an UnauthorizedException when the ability is denied.
      */
     public function testAuthorizeThrowsUnauthorizedException(): void
@@ -127,6 +159,24 @@ final class GateTest extends TestCase
         });
 
         self::assertTrue($this->gate->allows('foo', $post));
+    }
+
+    /**
+     * Asserts that multiple arguments can be passed when checking abilities.
+     */
+    public function testCanPassMultipleArgumentsWhenCheckingAbilities(): void
+    {
+        $post = new Post(1, 1);
+        $extra = 'context';
+
+        $this->gate->define('foo', function($actor, $x, $y) use ($post, $extra) {
+            self::assertEquals($post, $x);
+            self::assertEquals($extra, $y);
+
+            return true;
+        });
+
+        self::assertTrue($this->gate->allows('foo', $post, $extra));
     }
 
     /**
