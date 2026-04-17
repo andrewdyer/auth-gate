@@ -79,7 +79,7 @@ final class Gate
     public function any(array $abilities, mixed ...$args): bool
     {
         foreach ($abilities as $ability) {
-            if ($this->check([$ability], ...$args)) {
+            if ($this->inspect($ability, ...$args)) {
                 return true;
             }
         }
