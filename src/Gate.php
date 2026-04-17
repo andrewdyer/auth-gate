@@ -97,7 +97,7 @@ final class Gate
     public function authorize(array $abilities, mixed ...$args): void
     {
         if (!$this->check($abilities, $args)) {
-            throw new UnauthorizedException('This action is unauthorized.');
+            throw UnauthorizedException::forAction();
         }
     }
 
