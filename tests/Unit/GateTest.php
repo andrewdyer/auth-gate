@@ -41,12 +41,12 @@ final class GateTest extends TestCase
     public function testActorIsInjectedIntoClosureCallbacks(): void
     {
         $this->gate->define('foo', function($actor) {
-            self::assertEquals(1, $actor->getId());
+            $this->assertEquals(1, $actor->getId());
 
             return true;
         });
 
-        self::assertTrue($this->gate->allows('foo'));
+        $this->assertTrue($this->gate->allows('foo'));
     }
 
     /**
@@ -62,7 +62,7 @@ final class GateTest extends TestCase
             return true;
         });
 
-        self::assertTrue($this->gate->all(['bar', 'foo']));
+        $this->assertTrue($this->gate->all(['bar', 'foo']));
     }
 
     /**
@@ -78,7 +78,7 @@ final class GateTest extends TestCase
             return true;
         });
 
-        self::assertTrue($this->gate->any(['foo', 'bar']));
+        $this->assertTrue($this->gate->any(['foo', 'bar']));
     }
 
     /**
@@ -94,7 +94,7 @@ final class GateTest extends TestCase
             return false;
         });
 
-        self::assertFalse($this->gate->any(['foo', 'bar']));
+        $this->assertFalse($this->gate->any(['foo', 'bar']));
     }
 
     /**
@@ -121,12 +121,12 @@ final class GateTest extends TestCase
         });
 
         $this->gate->before(function($actor, $ability) {
-            self::assertEquals('foo', $ability);
+            $this->assertEquals('foo', $ability);
 
             return false;
         });
 
-        self::assertFalse($this->gate->allows('foo'));
+        $this->assertFalse($this->gate->allows('foo'));
     }
 
     /**
@@ -139,10 +139,10 @@ final class GateTest extends TestCase
         });
 
         $this->gate->before(function($actor, $ability) {
-            self::assertEquals('foo', $ability);
+            $this->assertEquals('foo', $ability);
         });
 
-        self::assertFalse($this->gate->allows('foo'));
+        $this->assertFalse($this->gate->allows('foo'));
     }
 
     /**
@@ -153,12 +153,12 @@ final class GateTest extends TestCase
         $post = new Post(1, 1);
 
         $this->gate->define('foo', function($actor, $x) use ($post) {
-            self::assertEquals($post, $x);
+            $this->assertEquals($post, $x);
 
             return true;
         });
 
-        self::assertTrue($this->gate->allows('foo', $post));
+        $this->assertTrue($this->gate->allows('foo', $post));
     }
 
     /**
@@ -170,13 +170,13 @@ final class GateTest extends TestCase
         $extra = 'context';
 
         $this->gate->define('foo', function($actor, $x, $y) use ($post, $extra) {
-            self::assertEquals($post, $x);
-            self::assertEquals($extra, $y);
+            $this->assertEquals($post, $x);
+            $this->assertEquals($extra, $y);
 
             return true;
         });
 
-        self::assertTrue($this->gate->allows('foo', $post, $extra));
+        $this->assertTrue($this->gate->allows('foo', $post, $extra));
     }
 
     /**
@@ -188,7 +188,7 @@ final class GateTest extends TestCase
             return true;
         });
 
-        self::assertFalse($this->gate->denies('foo'));
+        $this->assertFalse($this->gate->denies('foo'));
     }
 
     /**
@@ -211,6 +211,6 @@ final class GateTest extends TestCase
             return true;
         });
 
-        self::assertTrue($this->gate->allows('foo'));
+        $this->assertTrue($this->gate->allows('foo'));
     }
 }
