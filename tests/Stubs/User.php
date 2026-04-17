@@ -1,26 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AndrewDyer\Gate\Tests\Stubs;
 
 use AndrewDyer\Gate\Authenticatable;
 
 /**
- * Class User.
+ * Stub implementation of Authenticatable representing a user actor.
  */
-class User implements Authenticatable
+final class User implements Authenticatable
 {
     /**
-     * @var int
+     * The unique identifier of the user.
      */
-    protected $id;
+    private readonly int $id;
 
     /**
-     * @var bool
+     * Indicates whether the user has administrator privileges.
      */
-    protected $isAdmin;
+    private readonly bool $isAdmin;
 
     /**
-     * @return int
+     * Creates a new User stub instance.
+     *
+     * @param int  $id      The unique identifier of the user.
+     * @param bool $isAdmin Indicates whether the user has administrator privileges.
+     */
+    public function __construct(
+        int $id,
+        bool $isAdmin
+    ) {
+        $this->id = $id;
+        $this->isAdmin = $isAdmin;
+    }
+
+    /**
+     * Returns the unique identifier of the user.
+     *
+     * @return int The user identifier.
      */
     public function getId(): int
     {
@@ -28,34 +46,12 @@ class User implements Authenticatable
     }
 
     /**
-     * @return bool
+     * Returns whether the user has administrator privileges.
+     *
+     * @return bool True if the user is an administrator, false otherwise.
      */
     public function getIsAdmin(): bool
     {
         return $this->isAdmin;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return $this
-     */
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @param bool $isAdmin
-     *
-     * @return $this
-     */
-    public function setIsAdmin(bool $isAdmin): self
-    {
-        $this->isAdmin = $isAdmin;
-
-        return $this;
     }
 }

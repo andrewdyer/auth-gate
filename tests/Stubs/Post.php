@@ -1,23 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AndrewDyer\Gate\Tests\Stubs;
 
 /**
- * Class Post.
+ * Stub representing a post resource used in gate authorization tests.
  */
-class Post
+final class Post
 {
     /**
-     * @var int
+     * The unique identifier of the post.
      */
-    protected $authorId;
-    /**
-     * @var int
-     */
-    protected $id;
+    private readonly int $id;
 
     /**
-     * @return int
+     * The identifier of the author who created the post.
+     */
+    private readonly int $authorId;
+
+    /**
+     * Creates a new Post stub instance.
+     *
+     * @param int $id       The unique identifier of the post.
+     * @param int $authorId The identifier of the author who created the post.
+     */
+    public function __construct(
+        int $id,
+        int $authorId
+    ) {
+        $this->id = $id;
+        $this->authorId = $authorId;
+    }
+
+    /**
+     * Returns the identifier of the author who created the post.
+     *
+     * @return int The author identifier.
      */
     public function getAuthorId(): int
     {
@@ -25,34 +44,12 @@ class Post
     }
 
     /**
-     * @return int
+     * Returns the unique identifier of the post.
+     *
+     * @return int The post identifier.
      */
     public function getId(): int
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $authorId
-     *
-     * @return $this
-     */
-    public function setAuthorId(int $authorId): self
-    {
-        $this->authorId = $authorId;
-
-        return $this;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return $this
-     */
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
     }
 }

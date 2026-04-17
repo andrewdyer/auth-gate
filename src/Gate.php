@@ -1,78 +1,68 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AndrewDyer\Gate;
 
 /**
- * Class Gate.
+ * Manages ability definitions and authorisation checks for an authenticated actor.
  */
 final class Gate
 {
     /**
-     * All of the defined abilities.
-     *
-     * @var array
+     * Registered ability callbacks indexed by ability name.
      */
-    protected $abilities = [];
+    private array $abilities = [];
 
     /**
-     * The user performing the action.
-     *
-     * @var Authenticatable
+     * Callbacks to run before ability checks.
      */
-    protected $actor;
+    private array $beforeCallbacks = [];
 
     /**
-     * All of the registered before callbacks.
+     * Creates a new Gate instance for the given actor.
      *
-     * @var array
+     * @param Authenticatable $actor The authenticated actor performing actions.
      */
-    protected $beforeCallbacks = [];
-
-    /**
-     * Gate constructor.
-     *
-     * @param Authenticatable $actor the user performing the action
-     */
-    public function __construct(Authenticatable $actor)
+    public function __construct(private readonly Authenticatable $actor)
     {
-        $this->actor = $actor;
     }
 
     /**
-     * Checks if all the given abilities should be granted for the actor.
+     * Determines whether the actor is allowed all of the given abilities.
      *
-     * @param array $abilities
-     * @param mixed ...$args
+     * @param array $abilities The ability names to check.
+     * @param mixed ...$args   Additional arguments passed to ability callbacks.
      *
-     * @return bool
+     * @return bool True if all abilities are allowed, false otherwise.
      */
-    public function all(array $abilities, ...$args): bool
+    public function all(array $abilities, mixed ...$args): bool
     {
         return $this->check($abilities, $args);
     }
 
     /**
-     * Checks if the given ability should be granted for the actor.
+     * Determines whether the actor is allowed the given ability.
      *
-     * @param string $ability
-     * @param mixed  ...$args
+     * @param string $ability The ability name to check.
+     * @param mixed  ...$args Additional arguments passed to the ability callback.
      *
-     * @return bool
+     * @return bool True if the ability is allowed, false otherwise.
      */
-    public function allows(string $ability, ...$args): bool
+    public function allows(string $ability, mixed ...$args): bool
     {
         return $this->check([$ability], $args);
     }
 
     /**
-     * Checks if any of the given abilities should be granted for the actor.
+     * Determines whether the actor is allowed at least one of the given abilities.
      *
-     * @param array $abilities
-     * @param mixed ...$args
+     * @param array $abilities The ability names to check.
+     * @param mixed ...$args   Additional arguments passed to ability callbacks.
      *
-     * @return bool
+     * @return bool True if any ability is allowed, false otherwise.
      */
-    public function any(array $abilities, ...$args): bool
+    public function any(array $abilities, mixed ...$args): bool
     {
         foreach ($abilities as $ability) {
             if ($this->check([$ability], $args)) {
@@ -84,14 +74,16 @@ final class Gate
     }
 
     /**
-     * Checks if all the given abilities should be granted for the actor and throws an unauthorized exception.
+     * Authorises the actor for all of the given abilities, or throws an exception.
      *
-     * @param array $abilities
-     * @param mixed ...$args
+     * @param array $abilities The ability names to check.
+     * @param mixed ...$args   Additional arguments passed to ability callbacks.
      *
-     * @throws UnauthorizedException
+     * @return void
+     *
+     * @throws UnauthorizedException When any of the given abilities is not allowed.
      */
-    public function authorize(array $abilities, ...$args): void
+    public function authorize(array $abilities, mixed ...$args): void
     {
         if (!$this->check($abilities, $args)) {
             throw new UnauthorizedException('This action is unauthorized.');
@@ -99,11 +91,11 @@ final class Gate
     }
 
     /**
-     * Register a callback to run before all checks.
+     * Registers a callback to run before all ability checks.
      *
-     * @param callable $beforeCallback
+     * @param callable $beforeCallback The callback to register.
      *
-     * @return $this
+     * @return self
      */
     public function before(callable $beforeCallback): self
     {
@@ -113,12 +105,12 @@ final class Gate
     }
 
     /**
-     * Register a new ability.
+     * Registers a callback for the given ability.
      *
-     * @param string   $ability
-     * @param callable $abilityCallback
+     * @param string   $ability         The ability name to register.
+     * @param callable $abilityCallback The callback that determines whether the ability is allowed.
      *
-     * @return $this
+     * @return self
      */
     public function define(string $ability, callable $abilityCallback): self
     {
@@ -128,27 +120,29 @@ final class Gate
     }
 
     /**
-     * Checks if the given ability should be denied for the actor.
+     * Determines whether the actor is denied the given ability.
      *
-     * @param string $ability
-     * @param mixed  ...$args
+     * @param string $ability The ability name to check.
+     * @param mixed  ...$args Additional arguments passed to the ability callback.
      *
-     * @return bool
+     * @return bool True if the ability is denied, false otherwise.
      */
-    public function denies(string $ability, ...$args): bool
+    public function denies(string $ability, mixed ...$args): bool
     {
         return !$this->check([$ability], $args);
     }
 
     /**
-     * Checks if the given abilities should be granted for the actor.
+     * Determines whether all of the given abilities pass inspection.
      *
-     * @param array $abilities
-     * @param array $args
+     * @param array $abilities The ability names to check.
+     * @param array $args      Arguments passed to ability callbacks.
      *
-     * @return bool
+     * @return bool True if all abilities pass, false otherwise.
+     *
+     * @internal
      */
-    protected function check(array $abilities, array $args = []): bool
+    private function check(array $abilities, array $args = []): bool
     {
         foreach ($abilities as $ability) {
             if (!$this->inspect($ability, $args)) {
@@ -160,16 +154,26 @@ final class Gate
     }
 
     /**
-     * @param string $ability
-     * @param array  $args
+     * Processes before callbacks and evaluates the ability callback for the given ability.
      *
-     * @return bool
+     * @param string $ability The ability name to inspect.
+     * @param array  $args    Arguments passed to the ability callback.
+     *
+     * @return bool True if the ability is allowed, false otherwise.
+     *
+     * @internal
      */
-    protected function inspect(string $ability, array $args): bool
+    private function inspect(string $ability, array $args): bool
     {
         foreach ($this->beforeCallbacks as $beforeCallback) {
-            if ($beforeCallback($this->actor, $ability)) {
+            $result = $beforeCallback($this->actor, $ability);
+
+            if ($result === true) {
                 return true;
+            }
+
+            if ($result === false) {
+                return false;
             }
         }
 

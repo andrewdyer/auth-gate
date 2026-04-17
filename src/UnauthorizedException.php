@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AndrewDyer\Gate;
 
-use Exception;
-
 /**
- * Class UnauthorizedException.
+ * Exception thrown when an actor is not authorised to perform an action.
  */
-class UnauthorizedException extends Exception
+final class UnauthorizedException extends \Exception
 {
 }
