@@ -1,6 +1,6 @@
 {
     "name": "andrewdyer/gate",
-    "description": "Check if a user is authorized to perform a given action",
+    "description": "A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface",
     "keywords": [
         "php",
         "gate",
