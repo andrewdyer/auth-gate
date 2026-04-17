@@ -177,6 +177,10 @@ final class Gate
             }
         }
 
+        if (!isset($this->abilities[$ability])) {
+            throw new UndefinedAbilityException("Ability [{$ability}] is not defined.");
+        }
+
         return $this->abilities[$ability]($this->actor, ...$args);
     }
 }

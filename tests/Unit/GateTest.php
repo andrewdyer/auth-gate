@@ -8,6 +8,7 @@ use AndrewDyer\Gate\Gate;
 use AndrewDyer\Gate\Tests\Stubs\Post;
 use AndrewDyer\Gate\Tests\Stubs\User;
 use AndrewDyer\Gate\UnauthorizedException;
+use AndrewDyer\Gate\UndefinedAbilityException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -138,6 +139,17 @@ final class GateTest extends TestCase
         });
 
         self::assertFalse($this->gate->denies('foo'));
+    }
+
+    /**
+     * Asserts that checking an undefined ability throws an UndefinedAbilityException.
+     */
+    public function testCheckingUndefinedAbilityThrowsException(): void
+    {
+        $this->expectException(UndefinedAbilityException::class);
+        $this->expectExceptionMessage('Ability [foo] is not defined.');
+
+        $this->gate->allows('foo');
     }
 
     /**
