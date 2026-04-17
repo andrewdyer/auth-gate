@@ -10,6 +10,7 @@ use AndrewDyer\Gate\Tests\Stubs\User;
 use AndrewDyer\Gate\UnauthorizedException;
 use AndrewDyer\Gate\UndefinedAbilityException;
 use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
 /**
  * Unit tests for Gate.
@@ -189,6 +190,25 @@ final class GateTest extends TestCase
         });
 
         $this->assertFalse($this->gate->denies('foo'));
+    }
+
+    /**
+     * Asserts that a before callback returning a non-boolean non-null value throws an exception.
+     */
+    public function testBeforeCallbackThrowsExceptionOnNonBooleanReturn(): void
+    {
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Before callback must return bool or null, got int.');
+
+        $this->gate->define('foo', function() {
+            return true;
+        });
+
+        $this->gate->before(function() {
+            return 1;
+        });
+
+        $this->gate->allows('foo');
     }
 
     /**
