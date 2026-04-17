@@ -1,81 +1,96 @@
+<p align="center">
+  <a href="https://packagist.org/packages/andrewdyer/gate"><img src="https://poser.pugx.org/andrewdyer/gate/v/stable?style=for-the-badge" alt="Latest Stable Version"></a>
+  <a href="https://packagist.org/packages/andrewdyer/gate"><img src="https://poser.pugx.org/andrewdyer/gate/downloads?style=for-the-badge" alt="Total Downloads"></a>
+  <a href="https://packagist.org/packages/andrewdyer/gate"><img src="https://poser.pugx.org/andrewdyer/gate/license?style=for-the-badge" alt="License"></a>
+  <a href="https://packagist.org/packages/andrewdyer/gate"><img src="https://poser.pugx.org/andrewdyer/gate/require/php?style=for-the-badge" alt="PHP Version Required"></a>
+</p>
+
 # Gate
 
-[![Latest Stable Version](https://poser.pugx.org/andrewdyer/gate/v/stable)](https://packagist.org/packages/andrewdyer/gate)
-[![Total Downloads](https://poser.pugx.org/andrewdyer/gate/downloads)](https://packagist.org/packages/andrewdyer/gate)
-[![Daily Downloads](https://poser.pugx.org/andrewdyer/gate/d/daily)](https://packagist.org/packages/andrewdyer/gate)
-[![Monthly Downloads](https://poser.pugx.org/andrewdyer/gate/d/monthly)](https://packagist.org/packages/andrewdyer/gate)
-[![Latest Unstable Version](https://poser.pugx.org/andrewdyer/gate/v/unstable)](https://packagist.org/packages/andrewdyer/gate)
-[![License](https://poser.pugx.org/andrewdyer/gate/license)](https://packagist.org/packages/andrewdyer/gate)
-[![composer.lock](https://poser.pugx.org/andrewdyer/gate/composerlock)](https://packagist.org/packages/andrewdyer/gate)
+A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface.
 
-Check if a user is authorized to perform a given action.
+## Introduction
 
-## License
-Licensed under MIT. Totally free for private or commercial projects.
+This library provides a lightweight, dependency-free mechanism for registering ability callbacks and evaluating them against an authenticated actor. It supports before-hooks for global overrides, multiple ability checks, and throws a typed exception when authorisation fails, making it straightforward to integrate into any PHP application regardless of framework.
+
+## Prerequisites
+
+- **[PHP](https://www.php.net/)**: Version 8.3 or higher is required.
+- **[Composer](https://getcomposer.org/)**: Dependency management tool for PHP.
 
 ## Installation
-```text
+
+```bash
 composer require andrewdyer/gate
 ```
 
 ## Getting Started
 
-To get started with the Gate library, you need to create an instance of the `Gate` class and pass an `Authenticatable` user to it.
+Implement the `Authenticatable` interface on the actor class, then create a `Gate` instance with that actor.
 
-```php
-use AndrewDyer\Gate\Gate;
-use AndrewDyer\Gate\Authenticatable;
+1. Implement the `Authenticatable` interface:
 
-class User implements Authenticatable {
-    // User implementation
-}
+   ```php
+   use AndrewDyer\Gate\Authenticatable;
 
-$user = new User();
-$gate = new Gate($user);
-```
+   class User implements Authenticatable
+   {
+       public function __construct(public readonly int $id) {}
+   }
+   ```
+
+2. Create a `Gate` instance:
+
+   ```php
+   use AndrewDyer\Gate\Gate;
+
+   $user = new User(1);
+   $gate = new Gate($user);
+   ```
 
 ## Usage
 
+The following examples demonstrate the available gate operations using the setup above.
+
 ### Defining Abilities
 
-You can define abilities using the `define` method. The first argument is the name of the ability, and the second argument is a callback that determines if the user has the ability.
+Abilities are registered via the `define` method, which accepts an ability name and a callback that returns a boolean.
 
 ```php
 $gate->define('edit-post', function ($user, $post) {
-    return $user->id === $post->user_id;
+    return $user->id === $post->authorId;
 });
 ```
 
 ### Checking Abilities
 
-You can check abilities using the `allows` and `denies` methods.
+Use `allows` and `denies` to evaluate a single ability, or `all` and `any` for multiple abilities.
 
 ```php
-if ($gate->allows('edit-post', $post)) {
-    // The user can edit the post
-}
+$gate->allows('edit-post', $post); // true or false
+$gate->denies('edit-post', $post); // true or false
 
-if ($gate->denies('edit-post', $post)) {
-    // The user cannot edit the post
-}
+$gate->all(['edit-post', 'delete-post'], $post);  // true if all pass
+$gate->any(['edit-post', 'view-post'], $post);    // true if any pass
 ```
 
-### Authorizing Actions
+### Authorising Actions
 
-You can authorize actions using the `authorize` method. This method will throw an `UnauthorizedException` if the user does not have the required abilities.
+`authorize` throws an `UnauthorizedException` if the actor lacks any of the given abilities.
 
 ```php
+use AndrewDyer\Gate\UnauthorizedException;
+
 try {
     $gate->authorize(['edit-post'], $post);
-    // The user is authorized to edit the post
 } catch (UnauthorizedException $e) {
-    // The user is not authorized to edit the post
+    // Actor is not authorised
 }
 ```
 
 ### Registering Before Callbacks
 
-You can register a callback to run before all checks using the `before` method.
+Before callbacks run prior to all ability checks. Returning `true` or `false` short-circuits the evaluation; returning `null` (or nothing) defers to the defined ability.
 
 ```php
 $gate->before(function ($user, $ability) {
@@ -84,3 +99,7 @@ $gate->before(function ($user, $ability) {
     }
 });
 ```
+
+## License
+
+Licensed under the [MIT license](https://opensource.org/licenses/MIT) and is free for private or commercial projects.
