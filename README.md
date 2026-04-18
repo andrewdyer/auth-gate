@@ -57,44 +57,6 @@ $user = new User(1);
 $gate = new Gate($user);
 ```
 
-### 3. Define abilities
-
-Register abilities using the `define` method. Each ability is a callback that receives the actor and any additional arguments, and must return a boolean.
-
-```php
-$gate->define('edit-post', function ($user, $post) {
-    return $user->id === $post->authorId;
-});
-```
-
-### 4. Evaluate abilities
-
-Use `allows` and `denies` to check a single ability, or `all` and `any` for multiple abilities.
-
-```php
-$gate->allows('edit-post', $post); // true or false
-$gate->denies('edit-post', $post); // true or false
-
-$gate->all(['edit-post', 'delete-post'], $post);  // true if all pass
-$gate->any(['edit-post', 'view-post'], $post);    // true if any pass
-```
-
----
-
-### 5. Authorise actions
-
-Use `authorize` to enforce abilities. It throws an `UnauthorizedException` if any of the given abilities fail.
-
-```php
-use AndrewDyer\Gate\Exceptions\UnauthorizedException;
-
-try {
-    $gate->authorize(['edit-post'], $post);
-} catch (UnauthorizedException $e) {
-    // Actor is not authorised
-}
-```
-
 ### 6. Register before callbacks
 
 Before callbacks run prior to all ability checks. Returning `true` or `false` short-circuits the evaluation; returning `null` defers to the defined ability.
