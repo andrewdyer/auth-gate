@@ -7,6 +7,10 @@
   <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/require/php?style=for-the-badge" alt="PHP Version Required"></a>
 </p>
 
+<p align="center">
+  Built on top of <a href="https://github.com/andrewdyer/php-package-template">andrewdyer/php-package-template</a>
+</p>
+
 # Auth Gate
 
 A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface.
