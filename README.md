@@ -17,7 +17,7 @@ A framework-agnostic PHP library for defining and enforcing authorisation rules 
 
 ## Introduction
 
-This library provides a lightweight, dependency-free mechanism for registering ability callbacks and evaluating them against an authenticated actor. It supports before-hooks for global overrides, multiple ability checks, and throws a typed exception when authorisation fails, making it straightforward to integrate into any PHP application regardless of framework.
+This library provides a lightweight, dependency-free mechanism for registering ability callbacks and evaluating them against an authenticated actor — the user performing the action. It supports before-hooks for global overrides, multiple ability checks, and throws a typed exception when authorisation fails, making it straightforward to integrate into any PHP application regardless of framework.
 
 ## Prerequisites
 
@@ -34,7 +34,7 @@ composer require andrewdyer/auth-gate
 
 ### 1. Implement the actor
 
-Any class that represents an authenticated user or entity must implement the `Authenticatable` interface. This is the object that will be evaluated against your defined abilities.
+Any class that represents an authenticated actor must implement the `Authenticatable` interface. This is the object that will be evaluated against your defined abilities.
 
 ```php
 use AndrewDyer\Gate\Contracts\Authenticatable;
@@ -60,9 +60,9 @@ Instantiate the `Gate` with the authenticated actor. This instance will be used 
 ```php
 use AndrewDyer\Gate\Gate;
 
-$user = new User(id: 1);
+$actor = new User(id: 1);
 
-$gate = new Gate($user);
+$gate = new Gate($actor);
 ```
 
 ## Usage
@@ -74,8 +74,8 @@ The following examples demonstrate the available gate operations using the setup
 Abilities are registered via the `define` method, which accepts an ability name and a callback that returns a boolean.
 
 ```php
-$gate->define('edit-post', function ($user, $post) {
-    return $user->id === $post->authorId;
+$gate->define('edit-post', function ($actor, $post) {
+    return $actor->id === $post->authorId;
 });
 ```
 
@@ -110,8 +110,8 @@ try {
 Before callbacks run prior to all ability checks. Returning `true` or `false` short-circuits the evaluation; returning `null` (or nothing) defers to the defined ability.
 
 ```php
-$gate->before(function ($user, $ability) {
-    if ($user->isAdmin()) {
+$gate->before(function ($actor, $ability) {
+    if ($actor->isAdmin()) {
         return true;
     }
 });
