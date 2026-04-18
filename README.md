@@ -32,27 +32,80 @@ composer require andrewdyer/auth-gate
 
 ## Getting Started
 
-Implement the `Authenticatable` interface on the actor class, then create a `Gate` instance with that actor.
+### 1. Implement the actor
 
-1. Implement the `Authenticatable` interface:
+Any class that represents an authenticated user or entity must implement the `Authenticatable` interface. This is the object that will be evaluated against your defined abilities.
 
-   ```php
-   use AndrewDyer\Gate\Authenticatable;
+```php
+use AndrewDyer\Gate\Contracts\Authenticatable;
 
-   class User implements Authenticatable
-   {
-       public function __construct(public readonly int $id) {}
-   }
-   ```
+class User implements Authenticatable
+{
+    public function __construct(public readonly int $id) {}
+}
+```
 
-2. Create a `Gate` instance:
+### 2. Create a Gate instance
 
-   ```php
-   use AndrewDyer\Gate\Gate;
+Instantiate the `Gate` with the authenticated actor. This instance will be used to define and evaluate abilities.
 
-   $user = new User(1);
-   $gate = new Gate($user);
-   ```
+```php
+use AndrewDyer\Gate\Gate;
+
+$user = new User(1);
+
+$gate = new Gate($user);
+```
+
+### 3. Define abilities
+
+Register abilities using the `define` method. Each ability is a callback that receives the actor and any additional arguments, and must return a boolean.
+
+```php
+$gate->define('edit-post', function ($user, $post) {
+    return $user->id === $post->authorId;
+});
+```
+
+### 4. Evaluate abilities
+
+Use `allows` and `denies` to check a single ability, or `all` and `any` for multiple abilities.
+
+```php
+$gate->allows('edit-post', $post); // true or false
+$gate->denies('edit-post', $post); // true or false
+
+$gate->all(['edit-post', 'delete-post'], $post);  // true if all pass
+$gate->any(['edit-post', 'view-post'], $post);    // true if any pass
+```
+
+---
+
+### 5. Authorise actions
+
+Use `authorize` to enforce abilities. It throws an `UnauthorizedException` if any of the given abilities fail.
+
+```php
+use AndrewDyer\Gate\Exceptions\UnauthorizedException;
+
+try {
+    $gate->authorize(['edit-post'], $post);
+} catch (UnauthorizedException $e) {
+    // Actor is not authorised
+}
+```
+
+### 6. Register before callbacks
+
+Before callbacks run prior to all ability checks. Returning `true` or `false` short-circuits the evaluation; returning `null` defers to the defined ability.
+
+```php
+$gate->before(function ($user, $ability) {
+    if ($user->isAdmin()) {
+        return true;
+    }
+});
+```
 
 ## Usage
 
