@@ -60,7 +60,10 @@ Instantiate the `Gate` with the authenticated actor. This instance will be used 
 ```php
 use AndrewDyer\Gate\Gate;
 
-$actor = new User(id: 1);
+// Retrieve the authenticated actor's ID from the authentication layer
+$actorId = 1;
+
+$actor = new User($actorId);
 
 $gate = new Gate($actor);
 ```
