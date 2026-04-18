@@ -41,7 +41,15 @@ use AndrewDyer\Gate\Contracts\Authenticatable;
 
 class User implements Authenticatable
 {
-    public function __construct(public readonly int $id) {}
+    public function __construct(
+        public readonly int $id,
+        public readonly bool $admin = false,
+    ) {}
+
+    public function isAdmin(): bool
+    {
+        return $this->admin;
+    }
 }
 ```
 
@@ -52,21 +60,9 @@ Instantiate the `Gate` with the authenticated actor. This instance will be used 
 ```php
 use AndrewDyer\Gate\Gate;
 
-$user = new User(1);
+$user = new User(id: 1);
 
 $gate = new Gate($user);
-```
-
-### 6. Register before callbacks
-
-Before callbacks run prior to all ability checks. Returning `true` or `false` short-circuits the evaluation; returning `null` defers to the defined ability.
-
-```php
-$gate->before(function ($user, $ability) {
-    if ($user->isAdmin()) {
-        return true;
-    }
-});
 ```
 
 ## Usage
