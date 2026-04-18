@@ -1,5 +1,5 @@
 {
-    "name": "andrewdyer/gate",
+    "name": "andrewdyer/auth-gate",
     "description": "A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface",
     "type": "library",
     "license": "MIT",

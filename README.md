@@ -1,11 +1,11 @@
 <p align="center">
-  <a href="https://packagist.org/packages/andrewdyer/gate"><img src="https://poser.pugx.org/andrewdyer/gate/v/stable?style=for-the-badge" alt="Latest Stable Version"></a>
-  <a href="https://packagist.org/packages/andrewdyer/gate"><img src="https://poser.pugx.org/andrewdyer/gate/downloads?style=for-the-badge" alt="Total Downloads"></a>
-  <a href="https://packagist.org/packages/andrewdyer/gate"><img src="https://poser.pugx.org/andrewdyer/gate/license?style=for-the-badge" alt="License"></a>
-  <a href="https://packagist.org/packages/andrewdyer/gate"><img src="https://poser.pugx.org/andrewdyer/gate/require/php?style=for-the-badge" alt="PHP Version Required"></a>
+  <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/v/stable?style=for-the-badge" alt="Latest Stable Version"></a>
+  <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/downloads?style=for-the-badge" alt="Total Downloads"></a>
+  <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/license?style=for-the-badge" alt="License"></a>
+  <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/require/php?style=for-the-badge" alt="PHP Version Required"></a>
 </p>
 
-# Gate
+# Auth Gate
 
 A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface.
 
