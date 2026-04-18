@@ -1,8 +1,14 @@
+![Auth Gate](https://public-assets.andrewdyer.rocks/images/covers/auth-gate.png)
+
 <p align="center">
   <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/v/stable?style=for-the-badge" alt="Latest Stable Version"></a>
   <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/downloads?style=for-the-badge" alt="Total Downloads"></a>
   <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/license?style=for-the-badge" alt="License"></a>
   <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/require/php?style=for-the-badge" alt="PHP Version Required"></a>
+</p>
+
+<p align="center">
+  Built on top of <a href="https://github.com/andrewdyer/php-package-template">andrewdyer/php-package-template</a>
 </p>
 
 # Auth Gate
@@ -26,27 +32,38 @@ composer require andrewdyer/auth-gate
 
 ## Getting Started
 
-Implement the `Authenticatable` interface on the actor class, then create a `Gate` instance with that actor.
+### 1. Implement the actor
 
-1. Implement the `Authenticatable` interface:
+Any class that represents an authenticated user or entity must implement the `Authenticatable` interface. This is the object that will be evaluated against your defined abilities.
 
-   ```php
-   use AndrewDyer\Gate\Authenticatable;
+```php
+use AndrewDyer\Gate\Contracts\Authenticatable;
 
-   class User implements Authenticatable
-   {
-       public function __construct(public readonly int $id) {}
-   }
-   ```
+class User implements Authenticatable
+{
+    public function __construct(
+        public readonly int $id,
+        public readonly bool $admin = false,
+    ) {}
 
-2. Create a `Gate` instance:
+    public function isAdmin(): bool
+    {
+        return $this->admin;
+    }
+}
+```
 
-   ```php
-   use AndrewDyer\Gate\Gate;
+### 2. Create a Gate instance
 
-   $user = new User(1);
-   $gate = new Gate($user);
-   ```
+Instantiate the `Gate` with the authenticated actor. This instance will be used to define and evaluate abilities.
+
+```php
+use AndrewDyer\Gate\Gate;
+
+$user = new User(id: 1);
+
+$gate = new Gate($user);
+```
 
 ## Usage
 
