@@ -21,7 +21,7 @@ This library provides a lightweight, dependency-free mechanism for registering a
 ## Installation
 
 ```bash
-composer require andrewdyer/gate
+composer require andrewdyer/auth-gate
 ```
 
 ## Getting Started
