@@ -1,3 +1,5 @@
+![Auth Gate](http://public-assets.andrewdyer.rocks/images/covers/auth-gate.png)
+
 <p align="center">
   <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/v/stable?style=for-the-badge" alt="Latest Stable Version"></a>
   <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/downloads?style=for-the-badge" alt="Total Downloads"></a>
