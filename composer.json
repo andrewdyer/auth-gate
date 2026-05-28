@@ -3,6 +3,18 @@
     "description": "A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface",
     "type": "library",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrew Dyer",
+            "homepage": "https://andrewdyer.rocks",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/andrewdyer/auth-gate",
+    "support": {
+        "issues": "https://github.com/andrewdyer/auth-gate/issues",
+        "source": "https://github.com/andrewdyer/auth-gate"
+    },
     "autoload": {
         "psr-4": {
             "AndrewDyer\\Gate\\": "src"
