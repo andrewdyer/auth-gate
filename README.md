@@ -1,23 +1,15 @@
-![Auth Gate](https://public-assets.andrewdyer.rocks/images/covers/auth-gate.png)
-
-<p align="center">
-  <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/v/stable?style=for-the-badge" alt="Latest Stable Version"></a>
-  <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/downloads?style=for-the-badge" alt="Total Downloads"></a>
-  <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/license?style=for-the-badge" alt="License"></a>
-  <a href="https://packagist.org/packages/andrewdyer/auth-gate"><img src="https://poser.pugx.org/andrewdyer/auth-gate/require/php?style=for-the-badge" alt="PHP Version Required"></a>
-</p>
-
-<p align="center">
-  Built on top of <a href="https://github.com/andrewdyer/php-package-template">andrewdyer/php-package-template</a>
-</p>
-
 # Auth Gate
 
 A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface.
 
+[![Latest Stable Version](http://poser.pugx.org/andrewdyer/auth-gate/v?style=flat-square)](https://packagist.org/packages/andrewdyer/auth-gate)
+[![Total Downloads](http://poser.pugx.org/andrewdyer/auth-gate/downloads?style=flat-square)](https://packagist.org/packages/andrewdyer/auth-gate)
+[![License](http://poser.pugx.org/andrewdyer/auth-gate/license?style=flat-square)](https://packagist.org/packages/andrewdyer/auth-gate)
+[![PHP Version Require](http://poser.pugx.org/andrewdyer/auth-gate/require/php?style=flat-square)](https://packagist.org/packages/andrewdyer/auth-gate)
+
 ## Introduction
 
-This library provides a lightweight, dependency-free mechanism for registering ability callbacks and evaluating them against an authenticated actor — the user performing the action. It supports before-hooks for global overrides, multiple ability checks, and throws a typed exception when authorisation fails, making it straightforward to integrate into any PHP application regardless of framework.
+This library provides a lightweight, dependency-free mechanism for registering ability callbacks and evaluating them against an authenticated actor — the user performing the action. It supports before-hooks for global overrides, multiple ability checks, and throws a typed exception when authorisation fails, making it straightforward to integrate into any PHP application regardless of framework. The package is built on top of [andrewdyer/php-package-template](https://github.com/andrewdyer/php-package-template).
 
 ## Prerequisites
 
