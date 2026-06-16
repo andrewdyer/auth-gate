@@ -1,6 +1,6 @@
 {
     "name": "andrewdyer/auth-gate",
-    "description": "A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface",
+    "description": "A framework-agnostic gate for defining abilities and enforcing authorisation checks against an authenticated user",
     "type": "library",
     "license": "MIT",
     "authors": [
