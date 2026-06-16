@@ -1,6 +1,6 @@
 # Auth Gate
 
-A framework-agnostic gate for defining abilities and enforcing authorisation checks against an authenticated user.
+A framework-agnostic library for defining abilities and enforcing authorisation checks against an authenticated user.
 
 [![Latest Stable Version](http://poser.pugx.org/andrewdyer/auth-gate/v?style=flat-square)](https://packagist.org/packages/andrewdyer/auth-gate)
 [![Total Downloads](http://poser.pugx.org/andrewdyer/auth-gate/downloads?style=flat-square)](https://packagist.org/packages/andrewdyer/auth-gate)
