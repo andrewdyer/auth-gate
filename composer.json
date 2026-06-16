@@ -1,44 +1,52 @@
 {
-    "name": "andrewdyer/auth-gate",
-    "description": "A framework-agnostic library for defining abilities and enforcing authorisation checks against an authenticated user",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Andrew Dyer",
-            "homepage": "https://andrewdyer.rocks",
-            "role": "Developer"
-        }
-    ],
-    "homepage": "https://github.com/andrewdyer/auth-gate",
-    "support": {
-        "issues": "https://github.com/andrewdyer/auth-gate/issues",
-        "source": "https://github.com/andrewdyer/auth-gate"
-    },
-    "autoload": {
-        "psr-4": {
-            "AndrewDyer\\Gate\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "AndrewDyer\\Gate\\Tests\\": "tests"
-        }
-    },
-    "require": {
-        "php": "^8.3"
-    },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.75",
-        "phpunit/phpunit": "^10.5"
-    },
-    "scripts": {
-        "cs": "php-cs-fixer fix",
-        "test": "phpunit"
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+  "name": "andrewdyer/auth-gate",
+  "description": "A framework-agnostic library for defining abilities and enforcing authorisation checks against an authenticated user",
+  "keywords": [
+    "php",
+    "framework-agnostic",
+    "authorisation",
+    "authorization",
+    "gate",
+    "abilities"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andrew Dyer",
+      "homepage": "https://andrewdyer.rocks",
+      "role": "Developer"
+    }
+  ],
+  "homepage": "https://github.com/andrewdyer/auth-gate",
+  "support": {
+    "issues": "https://github.com/andrewdyer/auth-gate/issues",
+    "source": "https://github.com/andrewdyer/auth-gate"
+  },
+  "autoload": {
+    "psr-4": {
+      "AndrewDyer\\Gate\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AndrewDyer\\Gate\\Tests\\": "tests"
+    }
+  },
+  "require": {
+    "php": "^8.3"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.75",
+    "phpunit/phpunit": "^10.5"
+  },
+  "scripts": {
+    "cs": "php-cs-fixer fix",
+    "test": "phpunit"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }
