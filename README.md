@@ -1,6 +1,6 @@
 # Auth Gate
 
-A framework-agnostic PHP library for defining and enforcing authorisation rules through a simple, expressive gate interface.
+A framework-agnostic gate for defining abilities and enforcing authorisation checks against an authenticated user.
 
 [![Latest Stable Version](http://poser.pugx.org/andrewdyer/auth-gate/v?style=flat-square)](https://packagist.org/packages/andrewdyer/auth-gate)
 [![Total Downloads](http://poser.pugx.org/andrewdyer/auth-gate/downloads?style=flat-square)](https://packagist.org/packages/andrewdyer/auth-gate)
@@ -9,7 +9,7 @@ A framework-agnostic PHP library for defining and enforcing authorisation rules 
 
 ## Introduction
 
-This library provides a lightweight, dependency-free mechanism for registering ability callbacks and evaluating them against an authenticated actor — the user performing the action. It supports before-hooks for global overrides, multiple ability checks, and throws a typed exception when authorisation fails, making it straightforward to integrate into any PHP application regardless of framework. The package is built on top of [andrewdyer/php-package-template](https://github.com/andrewdyer/php-package-template).
+This library lets you register named ability callbacks and evaluate them against the authenticated user who is performing the action. It supports global before callbacks for overrides, checks for single or multiple abilities, and an explicit authorisation flow that throws an unauthorised exception when checks fail. Undefined abilities and invalid before callback return values are also surfaced through typed exceptions.
 
 ## Prerequisites
 
