@@ -1,6 +1,6 @@
 {
     "name": "andrewdyer/auth-gate",
-    "description": "A framework-agnostic gate for defining abilities and enforcing authorisation checks against an authenticated user",
+    "description": "A framework-agnostic library for defining abilities and enforcing authorisation checks against an authenticated user",
     "type": "library",
     "license": "MIT",
     "authors": [
