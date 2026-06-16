@@ -4,9 +4,9 @@
   "keywords": [
     "php",
     "framework-agnostic",
-    "authorisation",
     "authorization",
     "gate",
+    "access-control",
     "abilities"
   ],
   "type": "library",
